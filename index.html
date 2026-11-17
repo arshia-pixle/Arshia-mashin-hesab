@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arshia Calculator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #111827;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.calculator {
+    background: #1f2937;
+    padding: 25px;
+    border-radius: 22px;
+    width: 320px;
+    box-shadow: 0 15px 40px #0006;
+}
+
+h2 {
+    text-align: center;
+    color: #60a5fa;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 13px;
+    margin: 9px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+}
+
+input {
+    background: #374151;
+    color: white;
+}
+
+select {
+    background: #374151;
+    color: white;
+}
+
+button {
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+#result {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 22px;
+    color: #34d399;
+    overflow-wrap: anywhere;
+}
+.subtitle {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+    margin-top: -10px;
+}
+
+.signature {
+    border-top: 1px solid #374151;
+    margin-top: 25px;
+    padding-top: 15px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.signature strong {
+    display: block;
+    color: #60a5fa;
+    font-size: 15px;
+    margin: 7px;
+}
+
+.signature span {
+    font-size: 10px;
+    color: #6b7280;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <h2>Arshia Calculator</h2>
+<p class="subtitle">پروژه عرشیا قاسمی</p>
+
+    <input type="number" id="a" placeholder="First Number">
+
+    <select id="op">
+        <option value="+">Addition (+)</option>
+        <option value="-">Subtraction (-)</option>
+        <option value="*">Multiplication (*)</option>
+        <option value="/">Division (/)</option>
+    </select>
+
+    <input type="number" id="b" placeholder="Second Number">
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result">Result: 0</div>
+    <div class="signature">
+    <p>تکلیف استاد نعمت الله</p>
+    <p>Designed & Developed by</p>
+    <strong>Arshia Ghasemi</strong>
+    <span>© 2026</span>
+</div>
+</div>
+
+<script>
+async function calculate() {
+    const a = document.getElementById("a").value;
+    const b = document.getElementById("b").value;
+    const op = document.getElementById("op").value;
+    const result = document.getElementById("result");
+
+    if (a === "" || b === "") {
+        result.innerText = "Please enter both numbers!";
+        return;
+    }
+
+    try {
+        const response = await fetch("/calculate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({a, b, op})
+        });
+
+        const data = await response.json();
+
+        result.innerText = data.error
+            ? data.error
+            : "Result: " + data.result;
+
+    } catch (error) {
+        result.innerText = "Something went wrong!";
+    }
+}
+</script>
+
+</body>
+</html>
